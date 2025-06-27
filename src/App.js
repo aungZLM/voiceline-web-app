@@ -1,6 +1,10 @@
-// VoiceLine Web App – Fully Managed Dashboard with Edit, Delete, Filter, Export for Users, Clients, and Calls
+import React, { useState } from 'react';
+import { collection, getDocs, deleteDoc, doc, setDoc, addDoc } from 'firebase/firestore';
+import { db } from './firebase';
+import { Input, Button } from './components/ui';
 
-// Existing imports and Dashboard setup remain unchanged above...
+function App() {
+  // VoiceLine Web App – Fully Managed Dashboard with Edit, Delete, Filter, Export for Users, Clients, and Calls
 
   const [editingClientId, setEditingClientId] = useState(null);
   const [editClientForm, setEditClientForm] = useState({});
@@ -9,6 +13,8 @@
   const [newUser, setNewUser] = useState({});
   const [newClient, setNewClient] = useState({});
   const [newCall, setNewCall] = useState({});
+  const [editingUserId, setEditingUserId] = useState(null);
+  const [editUserForm, setEditUserForm] = useState({});
 
   const deleteClient = async (email) => {
     const snapshot = await getDocs(collection(db, "clients"));
@@ -87,31 +93,31 @@
     setNewCall({});
   };
 
-// Inside return(), below user table:
+  return (
+    <>
+      <h3 className="text-lg font-semibold mt-8">Add New User</h3>
+      <div className="mb-6 flex gap-2">
+        <Input placeholder="Name" value={newUser.name || ''} onChange={e => setNewUser(p => ({...p, name: e.target.value}))} />
+        <Input placeholder="Email" value={newUser.email || ''} onChange={e => setNewUser(p => ({...p, email: e.target.value}))} />
+        <Button className="bg-blue-600" onClick={addNewUser}>Add</Button>
+      </div>
 
-<>
-  <h3 className="text-lg font-semibold mt-8">Add New User</h3>
-  <div className="mb-6 flex gap-2">
-    <Input placeholder="Name" value={newUser.name || ''} onChange={e => setNewUser(p => ({...p, name: e.target.value}))} />
-    <Input placeholder="Email" value={newUser.email || ''} onChange={e => setNewUser(p => ({...p, email: e.target.value}))} />
-    <Button className="bg-blue-600" onClick={addNewUser}>Add</Button>
-  </div>
+      <h3 className="text-lg font-semibold">Add New Client</h3>
+      <div className="mb-6 flex gap-2">
+        <Input placeholder="Name" value={newClient.name || ''} onChange={e => setNewClient(p => ({...p, name: e.target.value}))} />
+        <Input placeholder="Email" value={newClient.email || ''} onChange={e => setNewClient(p => ({...p, email: e.target.value}))} />
+        <Button className="bg-blue-600" onClick={addNewClient}>Add</Button>
+      </div>
 
-  <h3 className="text-lg font-semibold">Add New Client</h3>
-  <div className="mb-6 flex gap-2">
-    <Input placeholder="Name" value={newClient.name || ''} onChange={e => setNewClient(p => ({...p, name: e.target.value}))} />
-    <Input placeholder="Email" value={newClient.email || ''} onChange={e => setNewClient(p => ({...p, email: e.target.value}))} />
-    <Button className="bg-blue-600" onClick={addNewClient}>Add</Button>
-  </div>
+      <h3 className="text-lg font-semibold">Add New Call</h3>
+      <div className="mb-6 flex gap-2">
+        <Input placeholder="Date" value={newCall.date || ''} onChange={e => setNewCall(p => ({...p, date: e.target.value}))} />
+        <Input placeholder="Duration" value={newCall.duration || ''} onChange={e => setNewCall(p => ({...p, duration: e.target.value}))} />
+        <Input placeholder="Interpreter" value={newCall.interpreter || ''} onChange={e => setNewCall(p => ({...p, interpreter: e.target.value}))} />
+        <Button className="bg-blue-600" onClick={addNewCall}>Add</Button>
+      </div>
+    </>
+  );
+}
 
-  <h3 className="text-lg font-semibold">Add New Call</h3>
-  <div className="mb-6 flex gap-2">
-    <Input placeholder="Date" value={newCall.date || ''} onChange={e => setNewCall(p => ({...p, date: e.target.value}))} />
-    <Input placeholder="Duration" value={newCall.duration || ''} onChange={e => setNewCall(p => ({...p, duration: e.target.value}))} />
-    <Input placeholder="Interpreter" value={newCall.interpreter || ''} onChange={e => setNewCall(p => ({...p, interpreter: e.target.value}))} />
-    <Button className="bg-blue-600" onClick={addNewCall}>Add</Button>
-  </div>
-</>
-
-// ... rest of the tables (Clients, Calls) continue unchanged
 export default App;
